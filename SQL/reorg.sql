@@ -29,3 +29,23 @@ CREATE SEQUENCE load_links_seq
   insert into izvor values (2, 'NJUSKALO');
   insert into izvor values (3, 'INDEX OGLASI');
   commit;
+  
+  create table oglasi(id number primary key, lol_id number, constraint lol_ogl_fk foreign key (lol_id) references load_links(id),
+  cijena number, datum_oglasa date);
+  
+  CREATE SEQUENCE oglasi_seq
+  MINVALUE 1
+  MAXVALUE 999999
+  START WITH 1
+  INCREMENT BY 1
+  CACHE 20;
+  
+  create table oglasi_slike(id number primary key, ogl_id number, constraint ogs_ogl_fk foreign key (ogl_id) references oglasi(id),
+  link_slike varchar2(1000));
+  
+  CREATE SEQUENCE oglasi_slike_seq
+  MINVALUE 1
+  MAXVALUE 999999
+  START WITH 1
+  INCREMENT BY 1
+  CACHE 20;

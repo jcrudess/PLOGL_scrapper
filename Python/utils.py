@@ -18,8 +18,17 @@ def startLoad():
 
 def insertLink(link, loadID, module, sifra):
     c = connect()
-    postoji = c.var(oracle.NUMBER)
-    print('pozivam utility.p_insert_load_link')
-    c.callproc('utility.p_insert_load_link', [link, loadID, module, sifra, postoji])
-    print('uspješno završen poziv procedure')
-    return int(postoji.getvalue())
+    id = c.var(oracle.NUMBER)
+    c.callproc('utility.p_insert_load_link', [link, loadID, module, sifra, id])
+    return int(id.getvalue())
+
+def insertOglas(oglas):
+    c = connect()
+    oglID = c.var(oracle.NUMBER)
+    slikeLinks = c.arrayvar(oracle.STRING, oglas.imgLinks)
+    c.callproc('utility.p_insert_oglas', [oglas.lolID, oglas.cijena, oglas.datumOglasa, slikeLinks, oglID])
+
+
+def odrediCijenu(soup):
+    pass
+    #TODO napravi funkciju za odrediti cijenu ako je nema u HTML atributu

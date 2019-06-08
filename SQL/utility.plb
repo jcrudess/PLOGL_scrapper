@@ -31,23 +31,49 @@ procedure p_insert_load_link(
     i_load_id in number, 
     i_izvor in varchar2, 
     i_sifra in number, 
-    o_postoji out number) is
+    o_id out number) is
 l_izv_id number;
+l_id number;
 begin
 select id into l_izv_id from izvor
 where izvor = i_izvor;
 if not f_provjeri_sifru(l_izv_id, i_sifra) then
+    l_id := load_links_seq.nextval;
     insert into load_links values(
-    load_links_seq.nextval,
+    l_id,
     i_load_id,
     i_hyperlink,
     i_sifra,
     l_izv_id,
     systimestamp);
-    o_postoji := 0;
+    o_id := l_id;
 else
-    o_postoji := 1;
+    o_id := 1;
 end if;
 commit;
 end p_insert_load_link;
+
+procedure p_insert_oglas(
+    i_lol_id in number,
+    i_cijena in number,
+    i_datum in varchar2,
+    i_slike in tt_varchar2,
+    o_id out number) is
+l_id number;
+begin
+l_id := oglasi_seq.nextval;
+insert into oglasi values(
+    l_id,
+    i_lol_id,
+    i_cijena,
+    to_date(i_datum, 'DD.MM.YYYY.'));
+for i in 1..i_slike.count loop
+insert into oglasi_slike values(
+    oglasi_slike_seq.nextval,
+    l_id,
+    i_slike(i));
+end loop;
+commit;
+o_id := l_id;
+end p_insert_oglas;
 end utility;

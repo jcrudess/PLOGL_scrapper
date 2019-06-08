@@ -7,4 +7,5 @@ from utils import startLoad
 # PlaviOglasnik()
 loadID = startLoad()
 print('load_id='+str(loadID))
-PlaviOglasnik(loadID)
+plo = PlaviOglasnik()
+plo.start(loadID)
