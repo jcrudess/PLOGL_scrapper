@@ -3,6 +3,7 @@ from stem import Signal
 from stem.control import Controller
 import requests
 import time
+import re
 
 def getTorSession():
     with Controller.from_port(port = 9051) as controller:
@@ -56,5 +57,17 @@ def insertOglas(oglas):
 
 
 def odrediCijenu(soup):
-    pass
-    #TODO napravi funkciju za odrediti cijenu ako je nema u HTML atributu
+    x = re.search("[0-9.,]+\s?(kn|KN|kuna|kune|Kuna|Kune|KUNA|KUNE|KUN|Kun|kun|\u20AC|EUR|eur|eura|EURA|Eura|Eur)", soup.text).group()
+    print(x)
+    if not x:
+        cijena = 0
+        print(cijena)
+    else:
+        cijena = re.search('[0-9]+',x.replace(',', '').replace('.', '').replace(' ','')).group()
+        if (int(cijena) < 1000):
+            #vjerovatno euri pa pomnoži sa 7.5
+            print('euri')
+            cijena = int(int(cijena)*7.5)
+        print(cijena)
+    print('-------------------------------------')
+    return cijena

@@ -5,7 +5,7 @@ from Oglas import Oglas
 
 class PlaviOglasnik:
     moduleName = 'PLAVI OGLASNIK'
-    brojStranica = 1
+    brojStranica = 10
     url = ''
 
     def __init__(self, session):
@@ -44,15 +44,13 @@ class PlaviOglasnik:
         try:
             cijenaTag = soup.select('span.price-oglas-details')#[0].string.replace('.', '').split(' ')[1]
             if not cijenaTag:
-                cijena = 0#odrediCijenu(soup)
+                cijena = odrediCijenu(soup)
             else:
                 cijena = cijenaTag[0].string.replace('.', '').split(' ')[1]
             datum = soup.select('span.hidden-sm b')[0].string.split(' ')[1]
             slikeList = []
             for link in soup.select('ul.thumbnails li'):
                 slikeList.append('http://www.oglasnik.hr' + link['data-fullscreen-url'])
-            if not slikeList:
-                print('nema slika!')
             return Oglas(link, cijena, datum, slikeList, lolID)
         except Exception as e:
             print('oglas '+link+' nije unesen! Error: ')
